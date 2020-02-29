@@ -15,6 +15,9 @@
                 ref="myCanvas"
                 width="1200"
                 height="1200"
+                @mousedown="onMouseDown($event)"
+                @mousemove="onMouseMove($event)"
+                @mouseup="onMouseUp($event)"
               ></canvas>
             </div>
           </v-card>
@@ -61,19 +64,72 @@
 
 <script lang="ts">
 import Vue from "vue";
+import Component from "vue-class-component";
+@Component
+export default class HelloWorld extends Vue {
+  bgColor = "#619CE8";
+  x = 0;
+  y = 0;
+  isDrawing = false;
+  rect = {} as DOMRect;
+  //canvas = this.$refs.myCanvas as HTMLCanvasElement;
+  //ctx = this.canvas.getContext("2d");
 
-export default Vue.extend({
-  name: "Main",
-
-  data: () => ({
-    bgColor: "#619CE8FF"
-  })
-});
+  mounted() {
+    this.initCanvas();
+  }
+  initCanvas() {
+    const canvas = this.$refs.myCanvas as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+    this.rect = canvas.getBoundingClientRect();
+    console.log("this is rect", this.rect, ctx);
+  }
+  onMouseDown(e) {
+    this.x = e.clientX - this.rect.left;
+    this.y = e.clientY - this.rect.top;
+    this.isDrawing = true;
+    console.log("mouse dow");
+  }
+  onMouseUp(e) {
+    if (this.isDrawing === true) {
+      this.drawLine(
+        this.x,
+        this.y,
+        e.clientX - this.rect.left,
+        e.clientY - this.rect.top
+      );
+      this.x = 0;
+      this.y = 0;
+      this.isDrawing = false;
+      console.log("mouse up");
+    }
+  }
+  onMouseMove(e) {
+    if (this.isDrawing === true) {
+      this.drawLine(
+        this.x,
+        this.y,
+        e.clientX - this.rect.left,
+        e.clientY - this.rect.top
+      );
+      this.x = e.clientX - this.rect.left;
+      this.y = e.clientY - this.rect.top;
+      console.log("mouse move");
+    }
+  }
+  drawLine(x1: number, x2: number, y1: number, y2: number) {
+    const canvas = this.$refs.myCanvas as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+    ctx.beginPath();
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 1;
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.closePath();
+    console.log("drawing line");
+  }
+}
 </script>
 
-<style scoped>
-#myCanvas {
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
+<style scoped></style>
