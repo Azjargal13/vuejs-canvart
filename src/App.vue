@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
-        <span>Let's draw on canvas</span>
+        <span>VueJs + CanvArt: Let's draw on canvas</span>
         <!-- <v-img
           alt="Vuetify Logo"
           class="shrink mr-2"
