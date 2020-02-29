@@ -5,14 +5,18 @@
         <div>
           <h1>Ready canvas</h1>
           <v-card class="d-inline-block mx-auto" elevation="6" :width="1250">
-            <p class="pa-3">Helper little functions for you later :)</p>
-            <canvas
-              id="myCanvas"
-              ref="myCanvas"
-              width="1200"
-              height="1200"
-              style="border:1px solid #000000;"
-            ></canvas>
+            <p class="pa-2">Helper little functions for you later :)</p>
+            <div class="pa-1 ma-auto" align="center">
+              <canvas
+                v-bind:style="{
+                  backgroundColor: bgColor
+                }"
+                id="myCanvas"
+                ref="myCanvas"
+                width="1200"
+                height="1200"
+              ></canvas>
+            </div>
           </v-card>
         </div>
       </v-col>
@@ -21,11 +25,17 @@
           <h1>Canvas tool</h1>
           <v-stepper vertical>
             <v-stepper-step step="1" complete
-              >Pick color for canvas border</v-stepper-step
+              >Pick a color for canvas background</v-stepper-step
             >
 
             <v-stepper-content step="1">
-              <v-color-picker class="ma-2" canvas-height="200"></v-color-picker>
+              <v-color-picker
+                hide-inputs
+                class="ma-2"
+                canvas-height="200"
+                v-model="bgColor"
+              ></v-color-picker>
+              selected color is {{ bgColor }}
             </v-stepper-content>
 
             <v-stepper-step step="2" complete
@@ -55,13 +65,15 @@ import Vue from "vue";
 export default Vue.extend({
   name: "Main",
 
-  data: () => ({})
+  data: () => ({
+    bgColor: "#619CE8FF"
+  })
 });
 </script>
 
 <style scoped>
 #myCanvas {
-  display: inline;
-  position: relative;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>
